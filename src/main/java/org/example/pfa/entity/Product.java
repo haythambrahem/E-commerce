@@ -1,7 +1,5 @@
 package org.example.pfa.entity;
 
-
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

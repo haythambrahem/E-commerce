@@ -1,41 +1,41 @@
 package org.example.pfa.controller;
 
-
+import org.example.pfa.IService.IProductService;
 import org.example.pfa.entity.Product;
-import org.example.pfa.service.productservice;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
+@CrossOrigin(origins = "*")
 public class ProductController {
-    private productservice service;
-    public void ProductController(productservice service) { this.service = service; }
+    @Autowired
+  private IProductService productservice;
 
-    @GetMapping
-    public List<Product> list() {
-        return service.listAll();
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Product> get(@PathVariable Long id) {
-        Product p = service.findById(id);
-        return p == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(p);
-    }
 
     @PostMapping
-    public ResponseEntity<Product> create
-            (@RequestBody Product product) {
-        Product saved = service.save(product);
-        return ResponseEntity.ok(saved);
+    public Product createProduct(@RequestBody Product product) {
+        return productservice.createProduct(product);
+    }
+    @GetMapping
+    public List<Product> getAllProducts() {
+        return productservice.getAllProducts();
+    }
+    @GetMapping("/{id}")
+    public Product getProductById(@PathVariable Long id) {
+        return productservice.getProductById(id);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build();
+    @PutMapping("/{id}")
+    public Product updateProduct(@PathVariable Long id, @RequestBody Product product) {
+        return productservice.updateProduct(id, product);
     }
+    @DeleteMapping("/{id}")
+    public void deleteProduct(@PathVariable Long id) {
+        productservice.deleteProductById(id);
+    }
+
 }
 
