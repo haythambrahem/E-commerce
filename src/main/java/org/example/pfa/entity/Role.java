@@ -21,7 +21,4 @@ public class Role {
     @JoinColumn(name = "id_user")
     private User user ;
 
-
-
-
 }

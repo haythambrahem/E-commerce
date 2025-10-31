@@ -1,8 +1,12 @@
 package org.example.pfa.controller;
 
 import org.example.pfa.IService.IUserService;
+import org.example.pfa.dto.response.AuthResponse;
 import org.example.pfa.entity.User;
+import org.example.pfa.security.jwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,8 +19,25 @@ public class UserController {
   private IUserService userService;
 
     @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
+    public ResponseEntity<?> createUser(@RequestBody User user) {
+        try {
+            User newUser = userService.createUser(user);
+            return ResponseEntity.ok(newUser);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT) // 409
+                    .body(e.getMessage()); // "Email déjà utilisé !"
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@RequestBody User user) {
+        User loggedInUser = userService.login(user);
+        if (loggedInUser != null) {
+            String token = jwtUtil.generateToken(loggedInUser.getEmail());
+            return ResponseEntity.ok(new AuthResponse(token, loggedInUser.getEmail(), loggedInUser.getUserName()));
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email ou mot de passe incorrect");
+        }
     }
 
     @GetMapping
