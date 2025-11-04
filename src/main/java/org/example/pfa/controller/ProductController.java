@@ -12,7 +12,7 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class ProductController {
     @Autowired
-  private IProductService productservice;
+      private IProductService productservice;
 
 
     @PostMapping

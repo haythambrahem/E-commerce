@@ -26,11 +26,11 @@ public class OrderController {
     return orderService.getAllOrders();
 }
 
-@GetMapping("/{id}")
-    public Order updateOrder(@PathVariable  Long id, @RequestBody Order order){
-    return orderService.updateOrder( id,order);
+    @PutMapping("/{id}")
+    public Order updateOrder(@PathVariable Long id, @RequestBody Order order){
+        return orderService.updateOrder(id, order);
+    }
 
-}
 
 @DeleteMapping("/{id}")
     public void deleteOrder(@PathVariable Long id){
