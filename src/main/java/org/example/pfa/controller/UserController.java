@@ -32,13 +32,30 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody User user) {
         User loggedInUser = userService.login(user);
+
         if (loggedInUser != null) {
             String token = jwtUtil.generateToken(loggedInUser.getEmail());
-            return ResponseEntity.ok(new AuthResponse(token, loggedInUser.getEmail(), loggedInUser.getUserName()));
+
+            // ✅ Récupérer le rôle principal (ex: ADMIN ou USER)
+            String roleName = loggedInUser.getRoles().isEmpty()
+                    ? null
+                    : loggedInUser.getRoles().get(0).getName();
+
+            // ✅ Retourner la réponse complète
+            AuthResponse response = new AuthResponse(
+                    token,
+                    loggedInUser.getEmail(),
+                    loggedInUser.getUserName(),
+                    roleName
+            );
+
+            return ResponseEntity.ok(response);
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email ou mot de passe incorrect");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Email ou mot de passe incorrect");
         }
     }
+
 
     @GetMapping
     public List<User> getAllUsers() {
