@@ -18,7 +18,6 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-    private String description;
 
     @OneToMany(mappedBy = "category" ,cascade = CascadeType.REMOVE)
     private List<Product> products;;

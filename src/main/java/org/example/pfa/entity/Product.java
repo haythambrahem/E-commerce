@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -15,7 +16,9 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "products")
 public class Product {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -29,10 +32,21 @@ public class Product {
 
     private Integer stock;
 
-    @ManyToOne
-    @JoinColumn(name = "category")
+    // ✅ Enum pour les saisons
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Category category;
-    @OneToMany(mappedBy = "product" ,cascade = CascadeType.REMOVE)
-    private List<OrderItem> orderitemList;
-}
 
+    // ✅ Image URL
+    private String imageUrl;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+    private List<OrderItem> orderitemList;
+
+    public enum Category {
+        PRINTEMPS,
+        ÉTÉ,
+        AUTOMNE,
+        HIVER
+    }
+}

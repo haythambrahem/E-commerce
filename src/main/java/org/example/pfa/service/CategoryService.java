@@ -38,7 +38,6 @@ public class CategoryService implements ICategoryService {
         Category existingCategory = categoryRepository.findById(id).orElse(null);
         if (existingCategory != null) {
             existingCategory.setName(categoryDetails.getName());
-            existingCategory.setDescription(categoryDetails.getDescription());
             existingCategory.setProducts(categoryDetails.getProducts());
             return categoryRepository.save(existingCategory);
         }
