@@ -45,7 +45,7 @@ public class Product {
 
     public enum Category {
         PRINTEMPS,
-        ÉTÉ,
+        ETE,
         AUTOMNE,
         HIVER
     }
