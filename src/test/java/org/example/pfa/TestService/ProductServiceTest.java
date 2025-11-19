@@ -1,8 +1,8 @@
-
 package org.example.pfa.TestService;
 
 import org.example.pfa.entity.Product;
 import org.example.pfa.repository.ProductRepository;
+import org.example.pfa.service.FileStorageService;
 import org.example.pfa.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +20,9 @@ class ProductServiceTest {
 
     @Mock
     private ProductRepository productRepo;
+
+    @Mock
+    private FileStorageService fileStorageService; // 🔹 Mock du service de fichiers
 
     @InjectMocks
     private ProductService productService;
@@ -54,12 +57,16 @@ class ProductServiceTest {
         when(mockFile.isEmpty()).thenReturn(false);
         when(mockFile.getOriginalFilename()).thenReturn("image.jpg");
 
+        // 🔹 Simule le retour de FileStorageService
+        when(fileStorageService.storeFile(mockFile)).thenReturn("/uploads/image.jpg");
+
         when(productRepo.save(any(Product.class))).thenAnswer(i -> i.getArgument(0));
 
         Product result = productService.createProduct(product, mockFile);
 
         assertNotNull(result.getImageUrl());
         assertTrue(result.getImageUrl().contains("/uploads/"));
+        verify(fileStorageService, times(1)).storeFile(mockFile); // 🔹 Vérifie l'appel au service
         verify(productRepo).save(any(Product.class));
     }
 
@@ -98,5 +105,4 @@ class ProductServiceTest {
         productService.deleteProduct(1L);
         verify(productRepo, times(1)).deleteById(1L);
     }
-
 }
