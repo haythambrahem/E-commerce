@@ -12,6 +12,7 @@ public class PfaApplication {
     public static void main(String[] args) {
         SpringApplication.run(PfaApplication.class, args);
     }
+
     @Bean
     public WebMvcConfigurer webMvcConfigurer() {
         return new WebMvcConfigurer() {

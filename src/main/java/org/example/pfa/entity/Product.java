@@ -1,5 +1,6 @@
 package org.example.pfa.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -41,6 +42,7 @@ public class Product {
     private String imageUrl;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private List<OrderItem> orderitemList;
 
     public enum Category {
