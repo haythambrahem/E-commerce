@@ -21,7 +21,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    
 
     private String userName;
 
@@ -30,7 +29,7 @@ public class User {
 
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -51,4 +50,11 @@ public class User {
             roles.add(defaultRole);
         }
     }
+
+    public User orElseThrow(Object userNotFound) {
+
+        return null;
+    }
+
+
 }

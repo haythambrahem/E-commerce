@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.pfa.IService.IOrderService;
 import org.example.pfa.entity.Order;
+import org.example.pfa.entity.User;
 import org.example.pfa.repository.OrderRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,8 +23,11 @@ public class OrderService implements IOrderService {
     @Autowired
     private OrderRepo orderRepository;
 
+
     @Override
-    public Order createOrder(Order order) {
+    public Order createOrder(Order order, Long userId) {
+        // Associer l'utilisateur connecté à la commande
+        order.setId(userId);
         return orderRepository.save(order);
     }
 
@@ -53,5 +57,10 @@ public class OrderService implements IOrderService {
     @Override
     public void deleteOrder(Long id) {
         orderRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Order> getOrdersByUser(User user) {
+        return List.of();
     }
 }

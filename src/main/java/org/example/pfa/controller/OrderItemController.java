@@ -10,8 +10,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/order-items")
 @CrossOrigin(origins = "*")
-
 public class OrderItemController {
+
     @Autowired
     private OrderItemService orderItemService;
 
@@ -29,6 +29,7 @@ public class OrderItemController {
     public OrderItem getOrderItemById(@PathVariable Long id) {
         return orderItemService.getOrderItemById(id);
     }
+
     @PutMapping("/{id}")
     public OrderItem updateOrderItem(@PathVariable Long id, @RequestBody OrderItem orderItem) {
         return orderItemService.UpdateOrderItem(id, orderItem);
@@ -38,6 +39,4 @@ public class OrderItemController {
     public void deleteOrderItem(@PathVariable Long id) {
         orderItemService.deleteOrderItem(id);
     }
-
-
 }
