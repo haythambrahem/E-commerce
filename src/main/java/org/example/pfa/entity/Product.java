@@ -1,13 +1,14 @@
 package org.example.pfa.entity;
 
-
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,7 +18,8 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "products")
 public class Product {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -29,12 +31,15 @@ public class Product {
     @Column(nullable = false)
     private BigDecimal price;
 
-    private Integer stock;
+    @Column(nullable = false)
+    private Integer stock = 0;
 
-    @ManyToOne
-    @JoinColumn(name = "category")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
     private Category category;
-    @OneToMany(mappedBy = "product" ,cascade = CascadeType.REMOVE)
-    private List<OrderItem> orderitemList;
+    
+    @JsonIgnore
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<OrderItem> orderitemList = new ArrayList<>();
 }
 
