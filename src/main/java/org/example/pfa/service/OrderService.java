@@ -63,12 +63,15 @@ public class OrderService implements IOrderService {
             Product product = productRepository.findById(itemDTO.getProductId())
                     .orElseThrow(() -> new ResourceNotFoundException("Product", itemDTO.getProductId()));
 
+            // Get available stock with null safety
+            int availableStock = product.getStock() != null ? product.getStock() : 0;
+
             // Validate stock availability
-            if (product.getStock() == null || product.getStock() < itemDTO.getQuantity()) {
+            if (availableStock < itemDTO.getQuantity()) {
                 throw new InsufficientStockException(
                         product.getName(),
                         itemDTO.getQuantity(),
-                        product.getStock() != null ? product.getStock() : 0
+                        availableStock
                 );
             }
 
@@ -86,7 +89,7 @@ public class OrderService implements IOrderService {
             total = total.add(subtotal);
 
             // Reduce stock
-            product.setStock(product.getStock() - itemDTO.getQuantity());
+            product.setStock(availableStock - itemDTO.getQuantity());
             productRepository.save(product);
         }
 

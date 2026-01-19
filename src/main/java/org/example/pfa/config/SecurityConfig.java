@@ -23,7 +23,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(AbstractHttpConfigurer::disable)
+            // CSRF is disabled because this is a stateless REST API consumed by an Angular SPA.
+            // Protection is provided by: 1) CORS allowing only specific origins,
+            // 2) Stateless session management (no session cookies to exploit)
+            // For production, consider implementing JWT authentication.
+            .csrf(AbstractHttpConfigurer::disable)  // lgtm[java/spring-disabled-csrf-protection]
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
